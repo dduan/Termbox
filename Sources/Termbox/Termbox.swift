@@ -134,9 +134,7 @@ public extension Cell {
     public init(character: UnicodeScalar, foreground: Attributes = .default,
         background: Attributes = .default)
     {
-        self.ch = character.value
-        self.fg = foreground.rawValue
-        self.bg = background.rawValue
+        self.init(ch: character.value, fg: foreground.rawValue, bg: background.rawValue)
     }
 
     public var character: UnicodeScalar {
