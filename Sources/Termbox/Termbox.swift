@@ -86,6 +86,10 @@ public struct Key: Equatable {
     public static let backspace2       = Key(rawValue: 0x7f)
     public static let ctrl8            = Key(rawValue: 0x7f)
 
+    public init(rawValue: UInt16) {
+        self.rawValue = rawValue
+    }
+
     public static func == (lhs: Key, rhs: Key) -> Bool {
         return lhs.rawValue == rhs.rawValue
     }
