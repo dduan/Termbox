@@ -403,7 +403,7 @@ public struct Termbox {
 
     /// Wait for an event up to 'timeout' milliseconds and fill the 'event'
     /// structure with it, when the event is available.
-    public static func peekEvent(timoutInMilliseconds timeout: Int32) -> Event?
+    public static func peekEvent(timeoutInMilliseconds timeout: Int32) -> Event?
     {
         var tbEvent = tb_event()
         switch tb_peek_event(&tbEvent, timeout) {
