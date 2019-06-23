@@ -1,14 +1,12 @@
 import ctermbox
 
 public struct Key: Equatable {
-
     let rawValue: UInt16
 
     // Key constants. See also struct tb_event's Key field.
     //
     // These are a safe subset of terminfo Keys, which exist on all popular
     // terminals. Termbox uses only them to stay truly portable.
-    //
     public static let f1               = Key(rawValue: 0xffff-0)
     public static let f2               = Key(rawValue: 0xffff-1)
     public static let f3               = Key(rawValue: 0xffff-2)
@@ -131,17 +129,16 @@ public struct Attributes: OptionSet {
 ///  - 'ch' is a unicode character
 ///  - 'fg' foreground color and attributes
 ///  - 'bg' background color and attributes
-///
 public typealias Cell = tb_cell
 public extension Cell {
     /// Creates a cell with a character, foreground and background.
-    public init(character: UnicodeScalar, foreground: Attributes = .default,
+    init(character: UnicodeScalar, foreground: Attributes = .default,
         background: Attributes = .default)
     {
         self.init(ch: character.value, fg: foreground.rawValue, bg: background.rawValue)
     }
 
-    public var character: UnicodeScalar {
+    var character: UnicodeScalar {
         get {
             return UnicodeScalar(self.ch)!
         }
@@ -150,7 +147,7 @@ public extension Cell {
         }
     }
 
-    public var foreground: Attributes {
+    var foreground: Attributes {
         get {
             return Attributes(rawValue: self.fg)
         }
@@ -159,7 +156,7 @@ public extension Cell {
         }
     }
 
-    public var background: Attributes {
+    var background: Attributes {
         get {
             return Attributes(rawValue: self.bg)
         }
@@ -354,11 +351,11 @@ public struct Termbox {
     ///
     ///
     /// Default termbox input mode is `.esc`.
-
     public static var inputModes: InputModes {
         get {
             return InputModes(rawValue: tb_select_input_mode(0))
         }
+
         set {
             tb_select_input_mode(newValue.rawValue)
         }
@@ -394,11 +391,11 @@ public struct Termbox {
     //    But you dont need to provide an offset.
     //
     // Default termbox output mode is `.normal`.
-    //
     public static var outputMode: OutputMode {
         get {
             return OutputMode(rawValue: tb_select_output_mode(0))!
         }
+
         set {
             tb_select_output_mode(newValue.rawValue)
         }
@@ -406,8 +403,7 @@ public struct Termbox {
 
     /// Wait for an event up to 'timeout' milliseconds and fill the 'event'
     /// structure with it, when the event is available.
-    public static func peekEvent(timoutInMilliseconds timeout: Int32)
-        -> Event?
+    public static func peekEvent(timoutInMilliseconds timeout: Int32) -> Event?
     {
         var tbEvent = tb_event()
         switch tb_peek_event(&tbEvent, timeout) {
