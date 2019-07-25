@@ -178,9 +178,10 @@ public enum Event {
     case character(modifier: Modifier?, value: UnicodeScalar)
     case resize(width: Int32, height: Int32)
     case mouse(x: Int32, y: Int32)
+    case other(UInt8)
     case timeout
 
-    init?(_ tbEvent: tb_event) {
+    init(_ tbEvent: tb_event) {
         switch tbEvent.type {
         case 1:
             if tbEvent.ch == 0 {
@@ -195,7 +196,7 @@ public enum Event {
         case 3:
             self = .mouse(x: tbEvent.x, y: tbEvent.y)
         default:
-            return nil
+            self = .other(tbEvent.type)
         }
     }
 }
@@ -207,20 +208,17 @@ public enum InitializationError: Error {
     case unsupportedTerminal
     case failedToOpenTTY
     case pipeTrapError
-    case unknown(code: Int)
 
     init?(_ code: Int32) {
         switch code {
-        case 0..<Int32.max:
-            return nil
-        case -1:
+        case TB_EUNSUPPORTED_TERMINAL:
             self = .unsupportedTerminal
-        case -2:
+        case TB_EFAILED_TO_OPEN_TTY:
             self = .failedToOpenTTY
-        case -3:
+        case TB_EPIPE_TRAP_ERROR:
             self = .pipeTrapError
         default:
-            self = .unknown(code: Int(code))
+            return nil
         }
     }
 }
@@ -230,9 +228,9 @@ public struct InputModes: OptionSet {
 
     public init(rawValue: Int32) { self.rawValue = rawValue }
 
-    public static let esc     = InputModes(rawValue: 1)
-    public static let alt     = InputModes(rawValue: 2)
-    public static let mouse   = InputModes(rawValue: 4)
+    public static let esc     = InputModes(rawValue: TB_INPUT_ESC)
+    public static let alt     = InputModes(rawValue: TB_INPUT_ALT)
+    public static let mouse   = InputModes(rawValue: TB_INPUT_MOUSE)
 }
 
 public enum OutputMode: Int32 {
@@ -324,6 +322,18 @@ public struct Termbox {
     {
         tb_change_cell(x, y, character.value, foreground.rawValue,
                        background.rawValue)
+    }
+
+    /// Changes cell's parameters in the internal back buffer at the specified
+    /// position.
+    public static func puts(x x0: Int32, y: Int32, string: String,
+        foreground: Attributes = .default, background: Attributes = .default)
+    {
+        var x = x0
+        for c in string.unicodeScalars {
+            put(x: x, y: y, character: c)
+            x += 1
+        }
     }
 
     /// Returns a pointer to internal cell back buffer. You can get its
