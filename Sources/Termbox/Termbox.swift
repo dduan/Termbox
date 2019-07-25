@@ -1,91 +1,222 @@
 import ctermbox
 
-public struct Key: Equatable {
-    let rawValue: UInt16
+public enum Key: Equatable {
+    case ctrl2
+    case ctrlA
+    case ctrlB
+    case ctrlC
+    case ctrlD
+    case ctrlE
+    case ctrlF
+    case ctrlG
+    case backspace
+    case tab
+    case ctrlJ
+    case ctrlK
+    case ctrlL
+    case enter
+    case ctrlN
+    case ctrlO
+    case ctrlP
+    case ctrlQ
+    case ctrlR
+    case ctrlS
+    case ctrlT
+    case ctrlU
+    case ctrlV
+    case ctrlW
+    case ctrlX
+    case ctrlY
+    case ctrlZ
+    case esc
+    case ctrlBackslash
+    case ctrlRightBracket
+    case ctrl6
+    case ctrlSlash
+    case space
 
     // Key constants. See also struct tb_event's Key field.
     //
     // These are a safe subset of terminfo Keys, which exist on all popular
     // terminals. Termbox uses only them to stay truly portable.
-    public static let f1               = Key(rawValue: 0xffff-0)
-    public static let f2               = Key(rawValue: 0xffff-1)
-    public static let f3               = Key(rawValue: 0xffff-2)
-    public static let f4               = Key(rawValue: 0xffff-3)
-    public static let f5               = Key(rawValue: 0xffff-4)
-    public static let f6               = Key(rawValue: 0xffff-5)
-    public static let f7               = Key(rawValue: 0xffff-6)
-    public static let f8               = Key(rawValue: 0xffff-7)
-    public static let f9               = Key(rawValue: 0xffff-8)
-    public static let f10              = Key(rawValue: 0xffff-9)
-    public static let f11              = Key(rawValue: 0xffff-10)
-    public static let f12              = Key(rawValue: 0xffff-11)
-    public static let insert           = Key(rawValue: 0xffff-12)
-    public static let delete           = Key(rawValue: 0xffff-13)
-    public static let home             = Key(rawValue: 0xffff-14)
-    public static let end              = Key(rawValue: 0xffff-15)
-    public static let pageUp           = Key(rawValue: 0xffff-16)
-    public static let pageDown         = Key(rawValue: 0xffff-17)
-    public static let arrowUp          = Key(rawValue: 0xffff-18)
-    public static let arrowDown        = Key(rawValue: 0xffff-19)
-    public static let arrowLeft        = Key(rawValue: 0xffff-20)
-    public static let arrowRight       = Key(rawValue: 0xffff-21)
-    public static let mouseLeft        = Key(rawValue: 0xffff-22)
-    public static let mouseRight       = Key(rawValue: 0xffff-23)
-    public static let mouseMiddle      = Key(rawValue: 0xffff-24)
-    public static let mouseRelease     = Key(rawValue: 0xffff-25)
-    public static let mouseWheelUp     = Key(rawValue: 0xffff-26)
-    public static let mouseWheelDown   = Key(rawValue: 0xffff-27)
+    case f1
+    case f2
+    case f3
+    case f4
+    case f5
+    case f6
+    case f7
+    case f8
+    case f9
+    case f10
+    case f11
+    case f12
+    case insert
+    case delete
+    case home
+    case end
+    case pageUp
+    case pageDown
+    case arrowUp
+    case arrowDown
+    case arrowLeft
+    case arrowRight
+    case mouseLeft
+    case mouseRight
+    case mouseMiddle
+    case mouseRelease
+    case mouseWheelUp
+    case mouseWheelDown
+    // all others
+    case rawValue(UInt16)
+
+    var rawValue: UInt16 {
+        switch self {
+        case .ctrl2:           return 0x00
+        case .ctrlA:           return 0x01
+        case .ctrlB:           return 0x02
+        case .ctrlC:           return 0x03
+        case .ctrlD:          return 0x04
+        case .ctrlE:           return 0x05
+        case .ctrlF:           return 0x06
+        case .ctrlG:           return 0x07
+        case .tab:             return 0x09
+        case .ctrlJ:           return 0x0a
+        case .ctrlK:           return 0x0b
+        case .ctrlL:           return 0x0c
+        case .enter:           return 0x0d
+        case .ctrlN:           return 0x0e
+        case .ctrlO:           return 0x0f
+        case .ctrlP:           return 0x10
+        case .ctrlQ:           return 0x11
+        case .ctrlR:           return 0x12
+        case .ctrlS:           return 0x13
+        case .ctrlT:           return 0x14
+        case .ctrlU:           return 0x15
+        case .ctrlV:           return 0x16
+        case .ctrlW:           return 0x17
+        case .ctrlX:           return 0x18
+        case .ctrlY:           return 0x19
+        case .ctrlZ:           return 0x1a
+        case .esc:             return 0x1b
+        case .ctrlBackslash:   return 0x1c
+        case .ctrlRightBracket:return 0x1d
+        case .ctrl6:           return 0x1e
+        case .ctrlSlash:       return 0x1f
+        case .space:           return 0x20
+        case .backspace:       return 0x7f
+
+        case .f1:              return 0xffff-0
+        case .f2:              return 0xffff-1
+        case .f3:              return 0xffff-2
+        case .f4:              return 0xffff-3
+        case .f5:              return 0xffff-4
+        case .f6:              return 0xffff-5
+        case .f7:              return 0xffff-6
+        case .f8:              return 0xffff-7
+        case .f9:              return 0xffff-8
+        case .f10:             return 0xffff-9
+        case .f11:             return 0xffff-10
+        case .f12:             return 0xffff-11
+        case .insert:          return 0xffff-12
+        case .delete:          return 0xffff-13
+        case .home:            return 0xffff-14
+        case .end:             return 0xffff-15
+        case .pageUp:          return 0xffff-16
+        case .pageDown:        return 0xffff-17
+        case .arrowUp:         return 0xffff-18
+        case .arrowDown:       return 0xffff-19
+        case .arrowLeft:       return 0xffff-20
+        case .arrowRight:      return 0xffff-21
+        case .mouseLeft:       return 0xffff-22
+        case .mouseRight:      return 0xffff-23
+        case .mouseMiddle:     return 0xffff-24
+        case .mouseRelease:    return 0xffff-25
+        case .mouseWheelUp:    return 0xffff-26
+        case .mouseWheelDown:  return 0xffff-27
+
+        case let .rawValue(rawValue):
+            return rawValue
+        }
+    }
 
     // These are all ASCII code points below SPACE character and a BACKSPACE
     // key.
-    public static let ctrlTilde        = Key(rawValue: 0x00)
-    public static let ctrl2            = Key(rawValue: 0x00)
-    public static let ctrlA            = Key(rawValue: 0x01)
-    public static let ctrlB            = Key(rawValue: 0x02)
-    public static let ctrlC            = Key(rawValue: 0x03)
-    public static let ctrlD            = Key(rawValue: 0x04)
-    public static let ctrlE            = Key(rawValue: 0x05)
-    public static let ctrlF            = Key(rawValue: 0x06)
-    public static let ctrlG            = Key(rawValue: 0x07)
-    public static let backPace         = Key(rawValue: 0x08)
-    public static let ctrlH            = Key(rawValue: 0x08)
-    public static let tab              = Key(rawValue: 0x09)
-    public static let ctrlI            = Key(rawValue: 0x09)
-    public static let ctrlJ            = Key(rawValue: 0x0a)
-    public static let ctrlK            = Key(rawValue: 0x0b)
-    public static let ctrlL            = Key(rawValue: 0x0c)
-    public static let enter            = Key(rawValue: 0x0d)
-    public static let ctrlM            = Key(rawValue: 0x0d)
-    public static let ctrlN            = Key(rawValue: 0x0e)
-    public static let ctrlO            = Key(rawValue: 0x0f)
-    public static let ctrlP            = Key(rawValue: 0x10)
-    public static let ctrlQ            = Key(rawValue: 0x11)
-    public static let ctrlR            = Key(rawValue: 0x12)
-    public static let ctrlS            = Key(rawValue: 0x13)
-    public static let ctrlT            = Key(rawValue: 0x14)
-    public static let ctrlU            = Key(rawValue: 0x15)
-    public static let ctrlV            = Key(rawValue: 0x16)
-    public static let ctrlW            = Key(rawValue: 0x17)
-    public static let ctrlX            = Key(rawValue: 0x18)
-    public static let ctrlY            = Key(rawValue: 0x19)
-    public static let ctrlZ            = Key(rawValue: 0x1a)
-    public static let esc              = Key(rawValue: 0x1b)
-    public static let ctrlLeftBracket  = Key(rawValue: 0x1b)
-    public static let ctrl3            = Key(rawValue: 0x1b)
-    public static let ctrl4            = Key(rawValue: 0x1c)
-    public static let ctrlBackslash    = Key(rawValue: 0x1c)
-    public static let ctrl5            = Key(rawValue: 0x1d)
-    public static let ctrlRightRracket = Key(rawValue: 0x1d)
-    public static let ctrl6            = Key(rawValue: 0x1e)
-    public static let ctrl7            = Key(rawValue: 0x1f)
-    public static let ctrlSlash        = Key(rawValue: 0x1f)
-    public static let ctrlUnderscore   = Key(rawValue: 0x1f)
-    public static let space            = Key(rawValue: 0x20)
-    public static let backspace2       = Key(rawValue: 0x7f)
-    public static let ctrl8            = Key(rawValue: 0x7f)
+    public static let ctrlTilde: Key        = .ctrl2
+    public static let ctrlH: Key            = .backspace
+    public static let ctrlI: Key            = .tab
+    public static let ctrlM: Key            = .enter
+    public static let ctrl3: Key            = .esc
+    public static let ctrlLeftBracket: Key  = .esc
+    public static let ctrlDash: Key         = .ctrlSlash
 
     public init(rawValue: UInt16) {
-        self.rawValue = rawValue
+        switch rawValue {
+        case 0x00: self = .ctrl2
+        case 0x01: self = .ctrlA
+        case 0x02: self = .ctrlB
+        case 0x03: self = .ctrlC
+        case 0x04: self = .ctrlD
+        case 0x05: self = .ctrlE
+        case 0x06: self = .ctrlF
+        case 0x07: self = .ctrlG
+        case 0x09: self = .tab
+        case 0x0a: self = .ctrlJ
+        case 0x0b: self = .ctrlK
+        case 0x0c: self = .ctrlL
+        case 0x0d: self = .enter
+        case 0x0e: self = .ctrlN
+        case 0x0f: self = .ctrlO
+        case 0x10: self = .ctrlP
+        case 0x11: self = .ctrlQ
+        case 0x12: self = .ctrlR
+        case 0x13: self = .ctrlS
+        case 0x14: self = .ctrlT
+        case 0x15: self = .ctrlU
+        case 0x16: self = .ctrlV
+        case 0x17: self = .ctrlW
+        case 0x18: self = .ctrlX
+        case 0x19: self = .ctrlY
+        case 0x1a: self = .ctrlZ
+        case 0x1b: self = .esc
+        case 0x1c: self = .ctrlBackslash
+        case 0x1d: self = .ctrlRightBracket
+        case 0x1e: self = .ctrl6
+        case 0x1f: self = .ctrlSlash
+        case 0x20: self = .space
+        case 0x08: self = .backspace
+        case 0x7f: self = .backspace
+        case 0xffff-0: self = .f1
+        case 0xffff-1: self = .f2
+        case 0xffff-2: self = .f3
+        case 0xffff-3: self = .f4
+        case 0xffff-4: self = .f5
+        case 0xffff-5: self = .f6
+        case 0xffff-6: self = .f7
+        case 0xffff-7: self = .f8
+        case 0xffff-8: self = .f9
+        case 0xffff-9: self = .f10
+        case 0xffff-10: self = .f11
+        case 0xffff-11: self = .f12
+        case 0xffff-12: self = .insert
+        case 0xffff-13: self = .delete
+        case 0xffff-14: self = .home
+        case 0xffff-15: self = .end
+        case 0xffff-16: self = .pageUp
+        case 0xffff-17: self = .pageDown
+        case 0xffff-18: self = .arrowUp
+        case 0xffff-19: self = .arrowDown
+        case 0xffff-20: self = .arrowLeft
+        case 0xffff-21: self = .arrowRight
+        case 0xffff-22: self = .mouseLeft
+        case 0xffff-23: self = .mouseRight
+        case 0xffff-24: self = .mouseMiddle
+        case 0xffff-25: self = .mouseRelease
+        case 0xffff-26: self = .mouseWheelUp
+        case 0xffff-27: self = .mouseWheelDown
+        default:
+            self = .rawValue(rawValue)
+        }
     }
 
     public static func == (lhs: Key, rhs: Key) -> Bool {
