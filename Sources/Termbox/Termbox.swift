@@ -545,7 +545,7 @@ public struct Termbox {
 
     /// Wait for an event up to 'timeout' milliseconds and fill the 'event'
     /// structure with it, when the event is available.
-    public static func peekEvent(timeoutInMilliseconds timeout: Int32) -> Event?
+    public static func peekEvent(timeoutInMilliseconds timeout: Int32) -> Event
     {
         var tbEvent = tb_event()
         switch tb_peek_event(&tbEvent, timeout) {
@@ -558,7 +558,7 @@ public struct Termbox {
 
     // Wait for an event forever and fill the 'event' structure with it when the
     // event is available.
-    public static func pollEvent() -> Event? {
+    public static func pollEvent() -> Event {
         var tbEvent = tb_event()
         tb_poll_event(&tbEvent)
         return Event(tbEvent)
