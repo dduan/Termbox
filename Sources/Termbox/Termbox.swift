@@ -238,6 +238,7 @@ public struct Attributes: OptionSet {
 
     // colors
     public static let `default` = Attributes(rawValue: 0x00)
+
     public static let black     = Attributes(rawValue: 0x01)
     public static let red       = Attributes(rawValue: 0x02)
     public static let green     = Attributes(rawValue: 0x03)
@@ -462,7 +463,7 @@ public struct Termbox {
     {
         var x = x0
         for c in string.unicodeScalars {
-            put(x: x, y: y, character: c)
+            put(x: x, y: y, character: c, foreground: foreground, background: background)
             x += 1
         }
     }
