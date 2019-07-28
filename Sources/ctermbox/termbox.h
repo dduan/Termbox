@@ -135,9 +135,9 @@ extern "C" {
  *  - 'bg' background color and attributes
  */
 struct tb_cell {
-	uint32_t ch;
-	uint16_t fg;
-	uint16_t bg;
+    uint32_t ch;
+    uint16_t fg;
+    uint16_t bg;
 };
 
 #define TB_EVENT_KEY    1
@@ -152,14 +152,14 @@ struct tb_cell {
  * one of them can be non-zero at a time.
  */
 struct tb_event {
-	uint8_t type;
-	uint8_t mod; /* modifiers to either 'key' or 'ch' below */
-	uint16_t key; /* one of the TB_KEY_* constants */
-	uint32_t ch; /* unicode character */
-	int32_t w;
-	int32_t h;
-	int32_t x;
-	int32_t y;
+    uint8_t type;
+    uint8_t mod; /* modifiers to either 'key' or 'ch' below */
+    uint16_t key; /* one of the TB_KEY_* constants */
+    uint32_t ch; /* unicode character */
+    int32_t w;
+    int32_t h;
+    int32_t x;
+    int32_t y;
 };
 
 /* Error codes returned by tb_init(). All of them are self-explanatory, except
@@ -207,7 +207,7 @@ SO_IMPORT void tb_present(void);
  */
 SO_IMPORT void tb_set_cursor(int cx, int cy);
 
-/* Changes cell's parameters in the internal back buffer at the specifiejjjc
+/* Changes cell's parameters in the internal back buffer at the specified
  * position.
  */
 SO_IMPORT void tb_put_cell(int x, int y, const struct tb_cell *cell);
@@ -280,11 +280,11 @@ SO_IMPORT int tb_select_input_mode(int mode);
  *        tb_change_cell(x, y, '@', 184, 240);
  *        tb_change_cell(x, y, '@', 0xb8, 0xf0);
  *
- * 2. TB_OUTPUT_216        => [0..216]
+ * 3. TB_OUTPUT_216        => [0..216]
  *    This mode supports the 3rd range of the 256 mode only.
  *    But you don't need to provide an offset.
  *
- * 3. TB_OUTPUT_GRAYSCALE  => [0..23]
+ * 4. TB_OUTPUT_GRAYSCALE  => [0..23]
  *    This mode supports the 4th range of the 256 mode only.
  *    But you dont need to provide an offset.
  *
