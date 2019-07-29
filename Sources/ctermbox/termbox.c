@@ -549,7 +549,7 @@ uint8_t get_base_color(uint32_t color) {
 }
 
 tb_color tb_rgb(uint32_t in) {
-#ifndef WITHOUT_TRUECOLOR
+#ifdef WITH_TRUECOLOR
   if (output_mode == 2)
     return in;
 #endif
@@ -631,7 +631,7 @@ static void set_colors(tb_color fg, tb_color bg) {
   tb_color fgcol, bgcol;
   bool default_fg, default_bg;
 
-#ifdef WITHOUT_TRUECOLOR
+#ifndef WITH_TRUECOLOR
   // remove attributes
   fgcol = fg & 0xFF;
   bgcol = bg & 0xFF;
@@ -646,7 +646,7 @@ static void set_colors(tb_color fg, tb_color bg) {
   char buf[32];
   WRITE_LITERAL("\033[");
 
-#ifndef WITHOUT_TRUECOLOR
+#ifdef WITH_TRUECOLOR
 
   default_fg = fg == TB_DEFAULT;
   default_bg = bg == TB_DEFAULT;

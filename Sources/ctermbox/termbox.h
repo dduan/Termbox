@@ -13,7 +13,7 @@
 extern "C" {
 #endif
 
-#ifndef WITHOUT_TRUECOLOR
+#ifdef WITH_TRUECOLOR
 
 typedef uint32_t tb_color;
 #define LAST_ATTR_INIT  0xFFFFFFFF
@@ -266,7 +266,7 @@ SO_IMPORT void tb_resize(void);
 
 #define TB_OUTPUT_NORMAL    0
 #define TB_OUTPUT_256       1
-#ifndef WITHOUT_TRUECOLOR
+#ifdef WITH_TRUECOLOR
 #define TB_OUTPUT_TRUECOLOR 2
 #endif
 

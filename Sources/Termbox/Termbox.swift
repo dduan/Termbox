@@ -61,12 +61,6 @@ public enum Key: Equatable {
     case arrowDown
     case arrowLeft
     case arrowRight
-    case mouseLeft
-    case mouseRight
-    case mouseMiddle
-    case mouseRelease
-    case mouseWheelUp
-    case mouseWheelDown
     // all others
     case rawValue(UInt16)
 
@@ -124,16 +118,10 @@ public enum Key: Equatable {
         case .end:             return 0xffff-15
         case .pageUp:          return 0xffff-16
         case .pageDown:        return 0xffff-17
-        case .arrowUp:         return 0xffff-18
-        case .arrowDown:       return 0xffff-19
-        case .arrowLeft:       return 0xffff-20
-        case .arrowRight:      return 0xffff-21
-        case .mouseLeft:       return 0xffff-22
-        case .mouseRight:      return 0xffff-23
-        case .mouseMiddle:     return 0xffff-24
-        case .mouseRelease:    return 0xffff-25
-        case .mouseWheelUp:    return 0xffff-26
-        case .mouseWheelDown:  return 0xffff-27
+        case .arrowLeft:       return 0xffff-18
+        case .arrowRight:      return 0xffff-19
+        case .arrowDown:       return 0xffff-20
+        case .arrowUp:         return 0xffff-21
 
         case let .rawValue(rawValue):
             return rawValue
@@ -204,16 +192,10 @@ public enum Key: Equatable {
         case 0xffff-15: self = .end
         case 0xffff-16: self = .pageUp
         case 0xffff-17: self = .pageDown
-        case 0xffff-18: self = .arrowUp
-        case 0xffff-19: self = .arrowDown
-        case 0xffff-20: self = .arrowLeft
-        case 0xffff-21: self = .arrowRight
-        case 0xffff-22: self = .mouseLeft
-        case 0xffff-23: self = .mouseRight
-        case 0xffff-24: self = .mouseMiddle
-        case 0xffff-25: self = .mouseRelease
-        case 0xffff-26: self = .mouseWheelUp
-        case 0xffff-27: self = .mouseWheelDown
+        case 0xffff-18: self = .arrowLeft
+        case 0xffff-19: self = .arrowRight
+        case 0xffff-20: self = .arrowDown
+        case 0xffff-21: self = .arrowUp
         default:
             self = .rawValue(rawValue)
         }
@@ -225,66 +207,78 @@ public enum Key: Equatable {
 }
 
 
+public typealias AttrSize = UInt16
 /// Attributes, it is possible to use multiple attributes by combining them
 /// using bitwise OR ('|'). Although, colors cannot be combined. But you can
 /// combine attributes and a single color. See also `Cell`'s `foreground` and
 /// `background` fields.
 public struct Attributes: OptionSet {
-    public let rawValue: UInt32
+    public let rawValue: AttrSize
 
-    public init(rawValue: UInt32) {
+    public init(rawValue: AttrSize) {
         self.rawValue = rawValue
     }
 
-    public static let `default` = Attributes(rawValue: UInt32(TB_DEFAULT))
+    public static let `default` = Attributes(rawValue: AttrSize(TB_DEFAULT))
     public static let zero = Attributes(rawValue: 0)
 
     // colors
-    public static let red           = Attributes(rawValue: UInt32(TB_RED))
-    public static let green         = Attributes(rawValue: UInt32(TB_GREEN))
-    public static let yellow        = Attributes(rawValue: UInt32(TB_YELLOW))
-    public static let blue          = Attributes(rawValue: UInt32(TB_BLUE))
-    public static let magenta       = Attributes(rawValue: UInt32(TB_MAGENTA))
-    public static let cyan          = Attributes(rawValue: UInt32(TB_CYAN))
-    public static let lighterGray   = Attributes(rawValue: UInt32(TB_LIGHTER_GRAY))
-    public static let mediumGray    = Attributes(rawValue: UInt32(TB_MEDIUM_GRAY))
-    public static let lightRed      = Attributes(rawValue: UInt32(TB_LIGHT_RED))
-    public static let lightGreen    = Attributes(rawValue: UInt32(TB_LIGHT_GREEN))
-    public static let lightYellow   = Attributes(rawValue: UInt32(TB_LIGHT_YELLOW))
-    public static let lightBlue     = Attributes(rawValue: UInt32(TB_LIGHT_BLUE))
-    public static let lightMagenta  = Attributes(rawValue: UInt32(TB_LIGHT_MAGENTA))
-    public static let lightCyan     = Attributes(rawValue: UInt32(TB_LIGHT_CYAN))
-    public static let white         = Attributes(rawValue: UInt32(TB_WHITE))
-    public static let black         = Attributes(rawValue: UInt32(TB_BLACK))
-    public static let darkestGray   = Attributes(rawValue: UInt32(TB_DARKEST_GRAY))
-    public static let darkerGray    = Attributes(rawValue: UInt32(TB_DARKER_GRAY))
-    public static let darkGray      = Attributes(rawValue: UInt32(TB_DARK_GRAY))
-    public static let lightGray     = Attributes(rawValue: UInt32(TB_LIGHT_GRAY))
-    public static let lightestGray  = Attributes(rawValue: UInt32(TB_LIGHTEST_GRAY))
+    public static let red           = Attributes(rawValue: AttrSize(TB_RED))
+    public static let green         = Attributes(rawValue: AttrSize(TB_GREEN))
+    public static let yellow        = Attributes(rawValue: AttrSize(TB_YELLOW))
+    public static let blue          = Attributes(rawValue: AttrSize(TB_BLUE))
+    public static let magenta       = Attributes(rawValue: AttrSize(TB_MAGENTA))
+    public static let cyan          = Attributes(rawValue: AttrSize(TB_CYAN))
+    public static let lighterGray   = Attributes(rawValue: AttrSize(TB_LIGHTER_GRAY))
+    public static let mediumGray    = Attributes(rawValue: AttrSize(TB_MEDIUM_GRAY))
+    public static let lightRed      = Attributes(rawValue: AttrSize(TB_LIGHT_RED))
+    public static let lightGreen    = Attributes(rawValue: AttrSize(TB_LIGHT_GREEN))
+    public static let lightYellow   = Attributes(rawValue: AttrSize(TB_LIGHT_YELLOW))
+    public static let lightBlue     = Attributes(rawValue: AttrSize(TB_LIGHT_BLUE))
+    public static let lightMagenta  = Attributes(rawValue: AttrSize(TB_LIGHT_MAGENTA))
+    public static let lightCyan     = Attributes(rawValue: AttrSize(TB_LIGHT_CYAN))
+    public static let white         = Attributes(rawValue: AttrSize(TB_WHITE))
+    public static let black         = Attributes(rawValue: AttrSize(TB_BLACK))
+    public static let darkestGray   = Attributes(rawValue: AttrSize(TB_DARKEST_GRAY))
+    public static let darkerGray    = Attributes(rawValue: AttrSize(TB_DARKER_GRAY))
+    public static let darkGray      = Attributes(rawValue: AttrSize(TB_DARK_GRAY))
+    public static let lightGray     = Attributes(rawValue: AttrSize(TB_LIGHT_GRAY))
+    public static let lightestGray  = Attributes(rawValue: AttrSize(TB_LIGHTEST_GRAY))
 
     // other
-    public static let bold      = Attributes(rawValue: UInt32(TB_DEFAULT))
-    public static let underline = Attributes(rawValue: UInt32(TB_DEFAULT))
-    public static let reverse   = Attributes(rawValue: UInt32(TB_DEFAULT))
+    public static let bold      = Attributes(rawValue: AttrSize(TB_DEFAULT))
+    public static let underline = Attributes(rawValue: AttrSize(TB_DEFAULT))
+    public static let reverse   = Attributes(rawValue: AttrSize(TB_DEFAULT))
 }
 
 public enum Modifier: UInt8 {
-    case shift = 2
-    case alt
-    case altShift
-    case ctrl
-    case ctrlShift
-    case altCtrl
-    case altCtrlShift
+    case none = 0
+    case shiftAlt     // 1
+    case shift        // 2
+    case alt          // 3
+    case altShift     // 4
+    case ctrl         // 5
+    case ctrlShift    // 6
+    case altCtrl      // 7
+    case altCtrlShift // 8
+    case altAlt       // 9
+}
+
+public enum Mouse: UInt16 {
+    case left = 0xffe9      // 0xffff-22
+    case right = 0xffe8     // 0xffff-23
+    case middle = 0xffe7    // 0xffff-24
+    case release = 0xffe6   // 0xffff-25
+    case wheelUp = 0xffe5   // 0xffff-26
+    case wheelDown = 0xffe4 // 0xffff-27
 }
 
 /// User interaction event.
 public enum Event {
-
-    case key(modifier: Modifier?, value: Key)
-    case character(modifier: Modifier?, value: UnicodeScalar)
+    case key(modifier: Modifier, value: Key)
+    case character(modifier: Modifier, value: UnicodeScalar)
     case resize(width: Int16, height: Int16)
-    case mouse(x: Int16, y: Int16)
+    case mouse(x: Int16, y: Int16, event: Mouse)
     case other(UInt8)
     case timeout
 
@@ -292,16 +286,20 @@ public enum Event {
         switch tbEvent.type {
         case 1:
             if tbEvent.ch == 0 {
-                self = .key(modifier: Modifier(rawValue: tbEvent.meta),
+                self = .key(modifier: Modifier(rawValue: tbEvent.meta) ?? .none,
                             value: Key(rawValue: tbEvent.key))
             } else {
-                self = .character(modifier: Modifier(rawValue: tbEvent.meta),
+                self = .character(modifier: Modifier(rawValue: tbEvent.meta) ?? .none,
                                   value: UnicodeScalar(tbEvent.ch)!)
             }
         case 2:
             self = .resize(width: tbEvent.w, height: tbEvent.h)
         case 3:
-            self = .mouse(x: tbEvent.x, y: tbEvent.y)
+            guard let mouse = Mouse(rawValue: tbEvent.key) else {
+                self = .other(tbEvent.type)
+                return
+            }
+            self = .mouse(x: tbEvent.x, y: tbEvent.y, event: mouse)
         default:
             self = .other(tbEvent.type)
         }
@@ -472,5 +470,7 @@ public struct Termbox {
         tb_poll_event(&tbEvent)
         return Event(tbEvent)
     }
+
+    public static var debug: (String) -> Void = { _ in }
 }
 
