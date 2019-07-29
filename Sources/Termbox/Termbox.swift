@@ -80,6 +80,7 @@ public enum Key: Equatable {
         case .ctrlE:           return 0x05
         case .ctrlF:           return 0x06
         case .ctrlG:           return 0x07
+        case .backspace:       return 0x08
         case .tab:             return 0x09
         case .ctrlJ:           return 0x0a
         case .ctrlK:           return 0x0b
@@ -104,7 +105,6 @@ public enum Key: Equatable {
         case .ctrl6:           return 0x1e
         case .ctrlSlash:       return 0x1f
         case .space:           return 0x20
-        case .backspace:       return 0x7f
 
         case .f1:              return 0xffff-0
         case .f2:              return 0xffff-1
@@ -230,77 +230,52 @@ public enum Key: Equatable {
 /// combine attributes and a single color. See also `Cell`'s `foreground` and
 /// `background` fields.
 public struct Attributes: OptionSet {
-    public let rawValue: UInt16
+    public let rawValue: UInt32
 
-    public init(rawValue: UInt16) {
+    public init(rawValue: UInt32) {
         self.rawValue = rawValue
     }
 
-    // colors
-    public static let `default` = Attributes(rawValue: 0x00)
+    public static let `default` = Attributes(rawValue: UInt32(TB_DEFAULT))
+    public static let zero = Attributes(rawValue: 0)
 
-    public static let black     = Attributes(rawValue: 0x01)
-    public static let red       = Attributes(rawValue: 0x02)
-    public static let green     = Attributes(rawValue: 0x03)
-    public static let yellow    = Attributes(rawValue: 0x04)
-    public static let blue      = Attributes(rawValue: 0x05)
-    public static let magenta   = Attributes(rawValue: 0x06)
-    public static let cyan      = Attributes(rawValue: 0x07)
-    public static let white     = Attributes(rawValue: 0x08)
+    // colors
+    public static let red           = Attributes(rawValue: UInt32(TB_RED))
+    public static let green         = Attributes(rawValue: UInt32(TB_GREEN))
+    public static let yellow        = Attributes(rawValue: UInt32(TB_YELLOW))
+    public static let blue          = Attributes(rawValue: UInt32(TB_BLUE))
+    public static let magenta       = Attributes(rawValue: UInt32(TB_MAGENTA))
+    public static let cyan          = Attributes(rawValue: UInt32(TB_CYAN))
+    public static let lighterGray   = Attributes(rawValue: UInt32(TB_LIGHTER_GRAY))
+    public static let mediumGray    = Attributes(rawValue: UInt32(TB_MEDIUM_GRAY))
+    public static let lightRed      = Attributes(rawValue: UInt32(TB_LIGHT_RED))
+    public static let lightGreen    = Attributes(rawValue: UInt32(TB_LIGHT_GREEN))
+    public static let lightYellow   = Attributes(rawValue: UInt32(TB_LIGHT_YELLOW))
+    public static let lightBlue     = Attributes(rawValue: UInt32(TB_LIGHT_BLUE))
+    public static let lightMagenta  = Attributes(rawValue: UInt32(TB_LIGHT_MAGENTA))
+    public static let lightCyan     = Attributes(rawValue: UInt32(TB_LIGHT_CYAN))
+    public static let white         = Attributes(rawValue: UInt32(TB_WHITE))
+    public static let black         = Attributes(rawValue: UInt32(TB_BLACK))
+    public static let darkestGray   = Attributes(rawValue: UInt32(TB_DARKEST_GRAY))
+    public static let darkerGray    = Attributes(rawValue: UInt32(TB_DARKER_GRAY))
+    public static let darkGray      = Attributes(rawValue: UInt32(TB_DARK_GRAY))
+    public static let lightGray     = Attributes(rawValue: UInt32(TB_LIGHT_GRAY))
+    public static let lightestGray  = Attributes(rawValue: UInt32(TB_LIGHTEST_GRAY))
 
     // other
-    public static let bold      = Attributes(rawValue: 0x0100)
-    public static let underline = Attributes(rawValue: 0x0200)
-    public static let reverse   = Attributes(rawValue: 0x0400)
-}
-
-/// Typealias of `tb_cell` with Swift version of the attributes.
-///
-/// A cell, single conceptual entity on the terminal screen. The terminal screen
-/// is basically a 2d array of cells. It has the following fields:
-///  - 'ch' is a unicode character
-///  - 'fg' foreground color and attributes
-///  - 'bg' background color and attributes
-public typealias Cell = tb_cell
-public extension Cell {
-    /// Creates a cell with a character, foreground and background.
-    init(character: UnicodeScalar, foreground: Attributes = .default,
-        background: Attributes = .default)
-    {
-        self.init(ch: character.value, fg: foreground.rawValue, bg: background.rawValue)
-    }
-
-    var character: UnicodeScalar {
-        get {
-            return UnicodeScalar(self.ch)!
-        }
-        set {
-            self.ch = newValue.value
-        }
-    }
-
-    var foreground: Attributes {
-        get {
-            return Attributes(rawValue: self.fg)
-        }
-        set {
-            self.fg = newValue.rawValue
-        }
-    }
-
-    var background: Attributes {
-        get {
-            return Attributes(rawValue: self.bg)
-        }
-        set {
-            self.bg = newValue.rawValue
-        }
-    }
+    public static let bold      = Attributes(rawValue: UInt32(TB_DEFAULT))
+    public static let underline = Attributes(rawValue: UInt32(TB_DEFAULT))
+    public static let reverse   = Attributes(rawValue: UInt32(TB_DEFAULT))
 }
 
 public enum Modifier: UInt8 {
-    case alt         = 0x01
-    case mouseMotion = 0x02
+    case shift = 2
+    case alt
+    case altShift
+    case ctrl
+    case ctrlShift
+    case altCtrl
+    case altCtrlShift
 }
 
 /// User interaction event.
@@ -308,8 +283,8 @@ public enum Event {
 
     case key(modifier: Modifier?, value: Key)
     case character(modifier: Modifier?, value: UnicodeScalar)
-    case resize(width: Int32, height: Int32)
-    case mouse(x: Int32, y: Int32)
+    case resize(width: Int16, height: Int16)
+    case mouse(x: Int16, y: Int16)
     case other(UInt8)
     case timeout
 
@@ -317,10 +292,10 @@ public enum Event {
         switch tbEvent.type {
         case 1:
             if tbEvent.ch == 0 {
-                self = .key(modifier: Modifier(rawValue: tbEvent.mod),
+                self = .key(modifier: Modifier(rawValue: tbEvent.meta),
                             value: Key(rawValue: tbEvent.key))
             } else {
-                self = .character(modifier: Modifier(rawValue: tbEvent.mod),
+                self = .character(modifier: Modifier(rawValue: tbEvent.meta),
                                   value: UnicodeScalar(tbEvent.ch)!)
             }
         case 2:
@@ -355,21 +330,9 @@ public enum InitializationError: Error {
     }
 }
 
-public struct InputModes: OptionSet {
-    public let rawValue: Int32
-
-    public init(rawValue: Int32) { self.rawValue = rawValue }
-
-    public static let esc     = InputModes(rawValue: TB_INPUT_ESC)
-    public static let alt     = InputModes(rawValue: TB_INPUT_ALT)
-    public static let mouse   = InputModes(rawValue: TB_INPUT_MOUSE)
-}
-
 public enum OutputMode: Int32 {
-    case normal    = 1
-    case color256  = 2
-    case color216  = 3
-    case grayscale = 4
+    case color256 = 1
+    case trueColor = 2
 }
 
 public struct Termbox {
@@ -381,6 +344,8 @@ public struct Termbox {
         if let error = InitializationError(tb_init()) {
             throw error
         }
+
+        tb_clear_screen()
     }
 
     public static func initialize(file: String) throws {
@@ -401,32 +366,41 @@ public struct Termbox {
 
     /// Returns the size of the internal back buffer (which is the same as
     /// terminal's window size in characters). The internal buffer can be
-    /// resized after `clear()` or `present()` function calls. Both
+    /// resized after `clear()` or `render()` function calls. Both
     /// dimensions have an unspecified negative value when called before
     /// initialization or after shutdown.
     public static var width: Int32 {
-        return Int32(tb_width())
+        return tb_width()
     }
 
     public static var height: Int32 {
-        return Int32(tb_height())
+        return tb_height()
     }
 
     /// Clears the internal back buffer using default color.
     public static func clear() {
-        tb_clear()
+        tb_clear_buffer()
+    }
+
+    /// Should be called after a
+    public static func resize() {
+        tb_resize()
     }
 
     /// Clears the internal back buffer using specified color/attributes.
-    public static func clear(withForeground foreground: Attributes,
-        background: Attributes)
-    {
+    public static func clear(foreground: Attributes, background: Attributes) {
         tb_set_clear_attributes(foreground.rawValue, background.rawValue)
     }
 
     /// Synchronizes the internal back buffer with the terminal.
-    public static func present() {
-        tb_present()
+    public static func render() {
+        tb_render()
+    }
+
+    public static var title: String = "" {
+        didSet {
+            tb_set_title(title)
+        }
     }
 
     /// Sets the position of the cursor. Upper-left character is (0, 0). If you
@@ -435,104 +409,39 @@ public struct Termbox {
         tb_set_cursor(x, y)
     }
 
-    /// Hide the cursor. Equivalent to `setCursor(x: -1, y: -1)`.
     public static func hideCursor() {
-        tb_set_cursor(-1, -1)
+        tb_hide_cursor()
+    }
+
+    public static func showCursor() {
+        tb_show_cursor()
+    }
+
+    public static func enableMouse() {
+        tb_enable_mouse()
+    }
+
+    public static func disableMouse() {
+        tb_disable_mouse()
     }
 
     /// Changes cell's parameters in the internal back buffer at the specified
     /// position.
-    public static func put(x: Int32, y: Int32, cell: Cell) {
-        var cell = cell
-        tb_put_cell(x, y, &cell)
-    }
-
-    /// Changes cell's parameters in the internal back buffer at the specified
-    /// position.
-    public static func put(x: Int32, y: Int32, character: UnicodeScalar,
+    public static func putc(x: Int32, y: Int32, char: UnicodeScalar,
         foreground: Attributes = .default, background: Attributes = .default)
     {
-        tb_change_cell(x, y, character.value, foreground.rawValue,
-                       background.rawValue)
+        tb_char(x, y, foreground.rawValue, background.rawValue, char.value)
     }
 
     /// Changes cell's parameters in the internal back buffer at the specified
     /// position.
-    public static func puts(x x0: Int32, y: Int32, string: String,
+    public static func puts(x: Int32, y: Int32, string: String,
         foreground: Attributes = .default, background: Attributes = .default)
     {
-        var x = x0
-        for c in string.unicodeScalars {
-            put(x: x, y: y, character: c, foreground: foreground, background: background)
-            x += 1
-        }
+        let buffer = UnsafeMutablePointer<Int8>(mutating: string)
+        tb_string(x, y, foreground.rawValue, background.rawValue, buffer)
     }
 
-    /// Returns a pointer to internal cell back buffer. You can get its
-    /// dimensions using `width` and `height`. The pointer stays
-    /// valid as long as no `clear()` and `present()` calls are made. The
-    /// buffer is one-dimensional buffer containing lines of cells starting from
-    /// the top.
-    public static var unsafeCellBuffer: UnsafeMutableBufferPointer<Cell> {
-        return UnsafeMutableBufferPointer(start: tb_cell_buffer(),
-                                          count: Int(self.width * self.height))
-    }
-
-    /// The termbox input mode. Termbox has two input modes:
-    /// 1. Esc input mode.  When ESC sequence is in the buffer and it doesn't
-    ///    match any known ESC sequence => ESC means `Key.esc`.
-    /// 2. Alt input mode.  When ESC sequence is in the buffer and it doesn't
-    ///    match any known sequence => ESC enables Modifier.alt modifier for the
-    ///    next keyboard event.
-    ///
-    /// You can also apply `.mouse` via OR operation to either of
-    /// the modes (e.g. .esc | .mouse). If none of the main two modes were set,
-    /// but the mouse mode was, `.esc` mode is used. If for
-    /// some reason you've decided to use (.esc | .alt)
-    /// combination, it will behave as if only .esc was selected.
-    ///
-    ///
-    /// Default termbox input mode is `.esc`.
-    public static var inputModes: InputModes {
-        get {
-            return InputModes(rawValue: tb_select_input_mode(0))
-        }
-
-        set {
-            tb_select_input_mode(newValue.rawValue)
-        }
-    }
-
-    // Sets the termbox output mode. Termbox has three output options:
-    // 1. normal     => [1..8]
-    //    This mode provides 8 different colors:
-    //      black, red, green, yellow, blue, magenta, cyan, white
-    //    Shortcut: TB_BLACK, TB_RED, ...
-    //    Attributes: TB_BOLD, TB_UNDERLINE, TB_REVERSE
-    //
-    //    Example usage:
-    //        tb_change_cell(x, y, '@', TB_BLACK | TB_BOLD, TB_RED);
-    //
-    // 2. color256        => [0..256]
-    //    In this mode you can leverage the 256 terminal mode:
-    //    0x00 - 0x07: the 8 colors as in TB_OUTPUT_NORMAL
-    //    0x08 - 0x0f: TB_* | TB_BOLD
-    //    0x10 - 0xe7: 216 different colors
-    //    0xe8 - 0xff: 24 different shades of grey
-    //
-    //    Example usage:
-    //        tb_change_cell(x, y, '@', 184, 240);
-    //        tb_change_cell(x, y, '@', 0xb8, 0xf0);
-    //
-    // 2. color        => [0..216]
-    //    This mode supports the 3rd range of the 256 mode only.
-    //    But you don't need to provide an offset.
-    //
-    // 3. greyscale  => [0..23]
-    //    This mode supports the 4th range of the 256 mode only.
-    //    But you dont need to provide an offset.
-    //
-    // Default termbox output mode is `.normal`.
     public static var outputMode: OutputMode {
         get {
             return OutputMode(rawValue: tb_select_output_mode(0))!
