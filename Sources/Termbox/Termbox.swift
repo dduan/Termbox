@@ -246,9 +246,9 @@ public struct Attributes: OptionSet {
     public static let lightestGray  = Attributes(rawValue: AttrSize(TB_LIGHTEST_GRAY))
 
     // other
-    public static let bold      = Attributes(rawValue: AttrSize(TB_DEFAULT))
-    public static let underline = Attributes(rawValue: AttrSize(TB_DEFAULT))
-    public static let reverse   = Attributes(rawValue: AttrSize(TB_DEFAULT))
+    public static let bold      = Attributes(rawValue: AttrSize(TB_BOLD))
+    public static let underline = Attributes(rawValue: AttrSize(TB_UNDERLINE))
+    public static let reverse   = Attributes(rawValue: AttrSize(TB_REVERSE))
 }
 
 public enum Modifier: UInt8 {
