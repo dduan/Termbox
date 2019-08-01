@@ -277,8 +277,8 @@ public enum Mouse: UInt16 {
 public enum Event {
     case key(modifier: Modifier, value: Key)
     case character(modifier: Modifier, value: UnicodeScalar)
-    case resize(width: Int16, height: Int16)
-    case mouse(x: Int16, y: Int16, event: Mouse)
+    case resize(width: UInt16, height: UInt16)
+    case mouse(x: UInt16, y: UInt16, event: Mouse)
     case other(UInt8)
     case timeout
 

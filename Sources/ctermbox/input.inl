@@ -123,8 +123,8 @@ static int parse_mouse_event(struct tb_event *event, const char *buf, int len) {
     if ((b & 32) != 0) event->meta |= TB_META_MOTION;
 
     // the coord is 1,1 for upper left
-    event->x = (uint8_t)buf[4] - 1 - 32;
-    event->y = (uint8_t)buf[5] - 1 - 32;
+    event->x = (uint16_t)buf[4] - 1 - 32;
+    event->y = (uint16_t)buf[5] - 1 - 32;
 
     if (event->key > TB_KEY_MOUSE_RELEASE && !(event->meta & TB_META_MOTION)) { // click
       if (is_double_click(event->key, event->x, event->y)) {
@@ -215,8 +215,8 @@ static int parse_mouse_event(struct tb_event *event, const char *buf, int len) {
     event->type = TB_EVENT_MOUSE;
     if ((n1 & 32) != 0) event->meta |= TB_META_MOTION;
 
-    event->x = (uint8_t)n2 - 1;
-    event->y = (uint8_t)n3 - 1;
+    event->x = (uint16_t)n2 - 1;
+    event->y = (uint16_t)n3 - 1;
 
     if (event->key > TB_KEY_MOUSE_RELEASE && !(event->meta & TB_META_MOTION)) { // click
       if (is_double_click(event->key, event->x, event->y)) {

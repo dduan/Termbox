@@ -143,10 +143,10 @@ struct tb_event {
 	uint16_t key; /* one of the TB_KEY_* constants */
 	uint32_t ch; /* unicode character */
 	uint8_t meta;
-	int16_t w;
-	int16_t h;
-	int16_t x;
-	int16_t y;
+	uint16_t w;
+	uint16_t h;
+	uint16_t x;
+	uint16_t y;
 };
 
 /* Error codes returned by tb_init(). All of them are self-explanatory, except
