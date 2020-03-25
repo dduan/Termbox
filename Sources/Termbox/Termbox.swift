@@ -220,7 +220,7 @@ public struct Attributes: OptionSet {
     }
 
     public static let `default` = Attributes(rawValue: AttrSize(TB_DEFAULT))
-    public static let zero = Attributes(rawValue: 0)
+    public static let zero: Attributes = []
 
     // colors
     public static let red           = Attributes(rawValue: AttrSize(TB_RED))
@@ -436,8 +436,10 @@ public struct Termbox {
     public static func puts(x: Int32, y: Int32, string: String,
         foreground: Attributes = .default, background: Attributes = .default)
     {
-        let buffer = UnsafeMutablePointer<Int8>(mutating: string)
-        tb_string(x, y, foreground.rawValue, background.rawValue, buffer)
+        string.withCString() { str in
+            let buffer = UnsafeMutablePointer(mutating: str)
+            tb_string(x, y, foreground.rawValue, background.rawValue, buffer)
+        }
     }
 
     public static var outputMode: OutputMode {
