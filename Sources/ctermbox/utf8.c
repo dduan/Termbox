@@ -1,4 +1,4 @@
-#include "termbox.h"
+#include "include/ctermbox.h"
 
 static const unsigned char utf8_length[256] = {
   1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,

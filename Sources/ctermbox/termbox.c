@@ -13,7 +13,7 @@
 #include <unistd.h>
 #include <wchar.h>
 
-#include "termbox.h"
+#include "include/ctermbox.h"
 
 #include "bytebuffer.inl"
 #include "term.inl"
