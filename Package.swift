@@ -1,4 +1,4 @@
-// swift-tools-version:4.1
+// swift-tools-version:5.3
 import PackageDescription
 
 let package = Package(
@@ -9,6 +9,6 @@ let package = Package(
     ],
     targets: [
         .target(name: "Termbox", dependencies: ["ctermbox"]),
-        .target(name: "ctermbox"),
+        .target(name: "ctermbox", exclude: ["src/input.inl", "src/term.inl", "src/bytebuffer.inl"]),
     ]
 )
