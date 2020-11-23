@@ -10,5 +10,6 @@ let package = Package(
     targets: [
         .target(name: "Termbox", dependencies: ["ctermbox"]),
         .target(name: "ctermbox", exclude: ["src/input.inl", "src/term.inl", "src/bytebuffer.inl"]),
+        .target(name: "paint", dependencies: ["Termbox"], path: "Examples/paint"),
     ]
 )
