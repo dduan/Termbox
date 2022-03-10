@@ -9,7 +9,7 @@ jobs:
     strategy:
       matrix:
         xcode:
-          - 12.2
+          - 13.2.1
         action:
           - SwiftPM
     steps:

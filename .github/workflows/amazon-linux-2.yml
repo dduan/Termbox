@@ -9,10 +9,10 @@ jobs:
     strategy:
       matrix:
         swift:
-          - 5.3.1
+          - 5.5.2
         distro:
           - amazonlinux2
     steps:
     - uses: actions/checkout@v2
     - name: Test
-      run: Scripts/docker.sh Pathos 'swift build -Xswiftc -warnings-as-errors' ${{ matrix.swift }} ${{ matrix.distro }}
+      run: Scripts/docker.sh Termbox 'swift build -Xswiftc -warnings-as-errors' ${{ matrix.swift }} ${{ matrix.distro }}
