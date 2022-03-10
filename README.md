@@ -1,4 +1,4 @@
-| Swift 5.3 |
+| Swift 5.5 |
 |-|
 |[![Amazon Linux 2](https://github.com/dduan/Termbox/workflows/Amazon%20Linux%202/badge.svg)](https://github.com/dduan/Termbox/actions?query=workflow%3A%22Amazon+Linux+2%22)|
 |[![CentOS 8](https://github.com/dduan/Termbox/workflows/CentOS%208/badge.svg)](https://github.com/dduan/Termbox/actions?query=workflow%3A%22CentOS+8%22)|
