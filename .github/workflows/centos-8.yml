@@ -1,6 +1,6 @@
 name: CentOS 8
 
-on: [push, pull_request]
+on: [push]
 
 jobs:
   linux:

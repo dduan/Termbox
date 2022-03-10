@@ -1,6 +1,6 @@
 name: macOS 11.15
 
-on: [push, pull_request]
+on: [push]
 
 jobs:
   macos:
